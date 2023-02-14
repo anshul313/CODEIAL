@@ -8,8 +8,9 @@ const db = require('./config/mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
-const passportJwt = require('./config/passport-jwt-strategy');
-const passportgoogle = require('./config/passport-google-oauth2-strategy');
+const passportJWT = require('./config/passport-jwt-strategy');
+const passportGoogle = require('./config/passport-google-oauth2-strategy');
+
 const MongoStore = require('connect-mongo')(session);
 const sassMiddleware = require('node-sass-middleware');
 const flash = require('connect-flash');
@@ -23,7 +24,7 @@ app.use(sassMiddleware({
     outputStyle: 'extended',
     prefix: '/css'
 }));
-app.use(express.urlencoded({extended : true}));
+app.use(express.urlencoded());
 
 app.use(cookieParser());
 

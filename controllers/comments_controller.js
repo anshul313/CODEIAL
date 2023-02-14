@@ -1,6 +1,8 @@
 const Comment = require('../models/comment');
 const Post = require('../models/post');
 const commentMailer = require('../mailers/comments_mailer');
+const commentEmailWorker = require('../worker/comment_email_worker');
+const queue = require('../config/kue');
 
 module.exports.create = async function(req, res){
 
@@ -18,7 +20,15 @@ module.exports.create = async function(req, res){
             post.save();
 
             comment = await comment.populate('user', 'name email').execPopulate();
-            commentMailer.newComment(comment);
+            // commentMailer.newComment(comment);
+           var job =  queue.create('emails',comment).save(function(err){
+            // console.log('inside microtask create called');
+                if(err){
+                    console.log('error in creating a queue',err);
+                }
+                console.log('job enqueued',job.id);
+                
+            });
             if (req.xhr){
                 // Similar for comments to fetch the user's id!
                

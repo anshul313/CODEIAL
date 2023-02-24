@@ -1,6 +1,7 @@
 const fs = require('fs');
 const rfs = require('rotating-file-stream');
 const path = require('path');
+const { Module } = require('module');
 
 
 const logDirectory = path.join(__dirname, '../production_logs');
@@ -67,3 +68,4 @@ const production =  {
 
 
 module.exports = eval(process.env.CODEIAL_ENVIRONMENT) == undefined ? development : eval(process.env.CODEIAL_ENVIRONMENT);
+// module.exports = production;

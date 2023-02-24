@@ -1,9 +1,11 @@
 const express = require('express');
 const env = require('./config/environment');
 const logger = require('morgan');
+
+
 const cookieParser = require('cookie-parser');
 const app = express();
-require('./config/viewhelper')(app);
+require('./config/view-helpers')(app);
 const port = 8000;
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
@@ -20,11 +22,14 @@ const flash = require('connect-flash');
 const customMware = require('./config/middleware');
 
 // setup the chat server to be used with socket.io
-const chatServer = require('http').Server(app);
+const chatServer = require('http').createServer(app);
 const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
 chatServer.listen(5000);
 console.log('chat server is listening on port 5000');
 const path = require('path');
+const cors = require('cors');
+ 
+app.use(cors())
 
 if (env.name == 'development'){
     app.use(sassMiddleware({
@@ -36,7 +41,7 @@ if (env.name == 'development'){
     }));
 }
 
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended:true}));
 
 app.use(cookieParser());
 
